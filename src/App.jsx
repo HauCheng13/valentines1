@@ -299,7 +299,7 @@ function App() {
         <div className="container" ref={containerRef}>
           <div className="time-jp">{formatTime('Asia/Tokyo')}</div>
           <img src={valentineImg1} alt="Us" className="valentine-img" />
-          <h1>Be my Valentine? 💗</h1>
+          <h1>Valentine’s coworker? (HR Approved) 🥲</h1>
           <div className="buttons">
             <button
               className="btn-yes"
@@ -331,7 +331,7 @@ function App() {
           <div className="container success-message" style={{ display: 'block' }}>
             <div className="time-jp">{formatTime('Asia/Tokyo')}</div>
             <img src={penguinImg} alt="Penguin" className="penguin-img" />
-            <h1 className="success-text">HEY Miss.Trang</h1>
+            <h1 className="success-text">Hello Ms Trang</h1>
             <p className="sub-text">Had some fun with this instead of doing something productive 🤣🤣</p>
             <button className="btn-yes" onClick={handleReset}>Back</button>
           </div>
