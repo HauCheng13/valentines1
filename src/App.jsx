@@ -10,6 +10,13 @@ function App() {
   const [noAttempts, setNoAttempts] = useState(0)
   const confettiCanvasRef = useRef(null)
 
+  const handleReset = () => {
+    setYesPressed(false)
+    setNoAttempts(0)
+    setNoPos({ top: 'auto', left: 'auto', position: 'relative' })
+    setBtnSize(null)
+  }
+
   const noBtnRef = useRef(null)
   const containerRef = useRef(null)
 
@@ -189,7 +196,7 @@ function App() {
       {!yesPressed ? (
         <div className="container" ref={containerRef}>
           <img src={valentineImg1} alt="Us" className="valentine-img" />
-          <h1>Will you be my Valentine? 💗</h1>
+          <h1>Be my Valentine? 💗</h1>
           <div className="buttons">
             <button
               className="btn-yes"
@@ -218,8 +225,9 @@ function App() {
         <>
           <div className="container success-message" style={{ display: 'block' }}>
             <img src={penguinImg} alt="Penguin" className="penguin-img" />
-            <h1 className="success-text">I knew you’d say yes!</h1>
-            <p className="sub-text">And yet they say I got no rizz 🥰💐</p>
+            <h1 className="success-text">HEY Miss.Trang</h1>
+            <p className="sub-text">It's just for fun okayy 🤣🤣</p>
+            <button className="btn-yes" onClick={handleReset}>Back</button>
           </div>
           <canvas ref={confettiCanvasRef} id="confetti"></canvas>
         </>
@@ -229,6 +237,8 @@ function App() {
 }
 
 export default App
+
+
 
 
 
