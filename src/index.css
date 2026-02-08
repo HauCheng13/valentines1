@@ -122,6 +122,7 @@ h1 {
   animation: bump 200ms ease-out;
 }
 
+
 button {
   padding: 15px 40px;
   font-size: 1.2rem;
@@ -203,5 +204,28 @@ button {
   50% { transform: scale(1.08); }
   100% { transform: scale(1); }
 }
+
+
+
+
+.time-jp {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  font-size: 1rem;
+  color: var(--text-color);
+  opacity: 0.9;
+  letter-spacing: 0.5px;
+  text-shadow: 0 0 8px rgba(255, 117, 143, 0.25);
+  animation: timePulse 2.2s ease-in-out infinite;
+  z-index: 5;
+}
+
+@keyframes timePulse {
+  0% { transform: translateY(0); opacity: 0.85; }
+  50% { transform: translateY(-2px); opacity: 1; }
+  100% { transform: translateY(0); opacity: 0.85; }
+}
+
 
 

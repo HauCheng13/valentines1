@@ -8,7 +8,9 @@ function App() {
   const [noPos, setNoPos] = useState({ top: 'auto', left: 'auto', position: 'relative' })
   const [btnSize, setBtnSize] = useState(null)
   const [noAttempts, setNoAttempts] = useState(0)
+  const [now, setNow] = useState(new Date())
   const confettiCanvasRef = useRef(null)
+  const confettiAnimRef = useRef(null)
 
   const handleReset = () => {
     setYesPressed(false)
@@ -33,6 +35,13 @@ function App() {
       delay: Math.random() * 5 + 's'
     }))
     setHearts(newHearts)
+  }, [])
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setNow(new Date())
+    }, 1000)
+    return () => clearInterval(id)
   }, [])
 
   // Runaway No Button Logic
@@ -103,79 +112,172 @@ function App() {
     return () => window.removeEventListener('mousemove', handleMouseMove)
   }, [yesPressed, moveButton])
 
+  const clearConfetti = useCallback(() => {
+    if (!confettiCanvasRef.current) return
+
+    const canvas = confettiCanvasRef.current
+    const ctx = canvas.getContext('2d')
+
+    if (confettiAnimRef.current) {
+      cancelAnimationFrame(confettiAnimRef.current)
+      confettiAnimRef.current = null
+    }
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
+  }, [])
+
+  const spawnConfettiBurst = useCallback((count = 30) => {
+    if (!confettiCanvasRef.current || yesPressed) return
+
+    const canvas = confettiCanvasRef.current
+    const ctx = canvas.getContext('2d')
+    canvas.width = window.innerWidth
+    canvas.height = window.innerHeight
+
+    if (confettiAnimRef.current) {
+      cancelAnimationFrame(confettiAnimRef.current)
+    }
+
+    const colors = ['#ff4d6d', '#ff758f', '#ffb3c1', '#ffd6ff', '#e0aaff']
+    const originX = canvas.width / 2
+    const originY = Math.min(canvas.height * 0.35, 260)
+
+    let particles = Array.from({ length: count }).map(() => ({
+      x: originX + (Math.random() - 0.5) * 120,
+      y: originY + (Math.random() - 0.5) * 40,
+      size: Math.random() * 6 + 3,
+      speedY: Math.random() * 2 + 1,
+      speedX: (Math.random() - 0.5) * 4,
+      rotation: Math.random() * 360,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      life: 0
+    }))
+
+    const drawParticle = (p) => {
+      ctx.save()
+      ctx.translate(p.x, p.y)
+      ctx.rotate(p.rotation * Math.PI / 180)
+      ctx.fillStyle = p.color
+      ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size)
+      ctx.restore()
+    }
+
+    const animate = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      particles.forEach((p) => {
+        p.y += p.speedY
+        p.x += p.speedX
+        p.rotation += 6
+        p.life += 1
+      })
+      particles.forEach(drawParticle)
+      particles = particles.filter((p) => p.life < 50)
+
+      if (particles.length > 0) {
+        confettiAnimRef.current = requestAnimationFrame(animate)
+      } else {
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
+      }
+    }
+
+    animate()
+  }, [yesPressed])
+
   // Confetti Logic
   useEffect(() => {
-    if (yesPressed && confettiCanvasRef.current) {
-      const canvas = confettiCanvasRef.current
-      const ctx = canvas.getContext('2d')
+    if (!confettiCanvasRef.current) return
+
+    const canvas = confettiCanvasRef.current
+    const ctx = canvas.getContext('2d')
+
+    const resize = () => {
       canvas.width = window.innerWidth
       canvas.height = window.innerHeight
+    }
 
-      let particles = []
-      const colors = ['#ff4d6d', '#ff758f', '#ffb3c1', '#ffd6ff', '#e0aaff']
+    resize()
 
-      function ConfettiParticle() {
-        this.x = Math.random() * canvas.width
-        this.y = -20
-        this.size = Math.random() * 8 + 4
-        this.speedY = Math.random() * 3 + 2
-        this.speedX = Math.random() * 2 - 1
-        this.color = colors[Math.floor(Math.random() * colors.length)]
-        this.rotation = Math.random() * 360
-      }
+    if (!yesPressed) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      return
+    }
 
-      ConfettiParticle.prototype.update = function () {
-        this.y += this.speedY
-        this.x += this.speedX
-        this.rotation += 2
-      }
+    if (confettiAnimRef.current) {
+      cancelAnimationFrame(confettiAnimRef.current)
+    }
 
-      ConfettiParticle.prototype.draw = function () {
-        ctx.save()
-        ctx.translate(this.x, this.y)
-        ctx.rotate(this.rotation * Math.PI / 180)
-        ctx.fillStyle = this.color
-        ctx.fillRect(-this.size / 2, -this.size / 2, this.size, this.size)
-        ctx.restore()
-      }
+    let particles = []
+    const colors = ['#ff4d6d', '#ff758f', '#ffb3c1', '#ffd6ff', '#e0aaff']
 
-      // Spawn particles
-      for (let i = 0; i < 150; i++) {
-        setTimeout(() => {
-          particles.push(new ConfettiParticle())
-        }, i * 5)
-      }
+    function ConfettiParticle() {
+      this.x = Math.random() * canvas.width
+      this.y = -20
+      this.size = Math.random() * 8 + 4
+      this.speedY = Math.random() * 3 + 2
+      this.speedX = Math.random() * 2 - 1
+      this.color = colors[Math.floor(Math.random() * colors.length)]
+      this.rotation = Math.random() * 360
+    }
 
-      const animateConfetti = () => {
-        if (!ctx) return
-        ctx.clearRect(0, 0, canvas.width, canvas.height)
+    ConfettiParticle.prototype.update = function () {
+      this.y += this.speedY
+      this.x += this.speedX
+      this.rotation += 2
+    }
 
-        particles.forEach((p, index) => {
-          p.update()
-          p.draw()
-          if (p.y > canvas.height) {
-            particles.splice(index, 1)
-          }
-        })
+    ConfettiParticle.prototype.draw = function () {
+      ctx.save()
+      ctx.translate(this.x, this.y)
+      ctx.rotate(this.rotation * Math.PI / 180)
+      ctx.fillStyle = this.color
+      ctx.fillRect(-this.size / 2, -this.size / 2, this.size, this.size)
+      ctx.restore()
+    }
 
-        if (particles.length > 0) {
-          requestAnimationFrame(animateConfetti)
+    for (let i = 0; i < 150; i++) {
+      setTimeout(() => {
+        particles.push(new ConfettiParticle())
+      }, i * 5)
+    }
+
+    const animateConfetti = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+      particles.forEach((p, index) => {
+        p.update()
+        p.draw()
+        if (p.y > canvas.height) {
+          particles.splice(index, 1)
         }
-      }
+      })
 
-      animateConfetti()
-
-      const handleResize = () => {
-        canvas.width = window.innerWidth
-        canvas.height = window.innerHeight
+      if (particles.length > 0) {
+        confettiAnimRef.current = requestAnimationFrame(animateConfetti)
       }
-      window.addEventListener('resize', handleResize)
-      return () => window.removeEventListener('resize', handleResize)
+    }
+
+    animateConfetti()
+
+    window.addEventListener('resize', resize)
+    return () => {
+      window.removeEventListener('resize', resize)
+      if (confettiAnimRef.current) {
+        cancelAnimationFrame(confettiAnimRef.current)
+      }
     }
   }, [yesPressed])
 
+  const formatTime = (timeZone) => {
+    return new Intl.DateTimeFormat('en-US', {
+      timeZone,
+      timeStyle: 'medium'
+    }).format(now)
+  }
+
   return (
     <>
+
+
       {/* Background Hearts */}
       <div className="bg-hearts">
         {hearts.map(heart => (
@@ -195,12 +297,15 @@ function App() {
 
       {!yesPressed ? (
         <div className="container" ref={containerRef}>
+          <div className="time-jp">{formatTime('Asia/Tokyo')}</div>
           <img src={valentineImg1} alt="Us" className="valentine-img" />
           <h1>Be my Valentine? 💗</h1>
           <div className="buttons">
             <button
               className="btn-yes"
               onClick={() => setYesPressed(true)}
+              onMouseEnter={() => spawnConfettiBurst(40)}
+              onMouseLeave={clearConfetti}
             >
               Yes 💕
             </button>
@@ -224,22 +329,19 @@ function App() {
       ) : (
         <>
           <div className="container success-message" style={{ display: 'block' }}>
+            <div className="time-jp">{formatTime('Asia/Tokyo')}</div>
             <img src={penguinImg} alt="Penguin" className="penguin-img" />
             <h1 className="success-text">HEY Miss.Trang</h1>
-            <p className="sub-text">It's just for fun okayy 🤣🤣</p>
+            <p className="sub-text">Had some fun with this instead of doing something productive 🤣🤣</p>
             <button className="btn-yes" onClick={handleReset}>Back</button>
           </div>
-          <canvas ref={confettiCanvasRef} id="confetti"></canvas>
         </>
       )}
+      <canvas ref={confettiCanvasRef} id="confetti"></canvas>
     </>
   )
 }
 
 export default App
-
-
-
-
 
 
