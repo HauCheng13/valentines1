@@ -299,7 +299,7 @@ function App() {
         <div className="container" ref={containerRef}>
           <div className="time-jp">{formatTime('Asia/Tokyo')}</div>
           <img src={valentineImg1} alt="Us" className="valentine-img" />
-          <h1>Valentine’s coworker? (HR Approved) 🥲</h1>
+          <h1>Be my Valentine? 💗</h1>
           <div className="buttons">
             <button
               className="btn-yes"
