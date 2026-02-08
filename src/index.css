@@ -112,6 +112,16 @@ h1 {
   /* position: relative; Removed to allow fixed positioning of No button */
 }
 
+
+.no-attempts {
+  color: var(--text-color);
+  font-size: 0.95rem;
+  opacity: 0.8;
+  margin-top: 12px;
+  white-space: nowrap;
+  animation: bump 200ms ease-out;
+}
+
 button {
   padding: 15px 40px;
   font-size: 1.2rem;
@@ -187,3 +197,11 @@ button {
   pointer-events: none;
   z-index: 20;
 }
+
+@keyframes bump {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+
+

@@ -1,12 +1,13 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import './index.css'
-import valentineImg from './assets/valentine.jpg'
+import valentineImg1 from './assets/valentinepic.jpg'
 import penguinImg from './assets/penguin.jpg'
 
 function App() {
   const [yesPressed, setYesPressed] = useState(false)
   const [noPos, setNoPos] = useState({ top: 'auto', left: 'auto', position: 'relative' })
   const [btnSize, setBtnSize] = useState(null)
+  const [noAttempts, setNoAttempts] = useState(0)
   const confettiCanvasRef = useRef(null)
 
   const noBtnRef = useRef(null)
@@ -35,6 +36,7 @@ function App() {
 
     // Update timestamp for throttling
     lastMoveTime.current = Date.now()
+    setNoAttempts((count) => count + 1)
 
     const btnRect = noBtnRef.current.getBoundingClientRect()
 
@@ -186,7 +188,7 @@ function App() {
 
       {!yesPressed ? (
         <div className="container" ref={containerRef}>
-          <img src={valentineImg} alt="Us" className="valentine-img" />
+          <img src={valentineImg1} alt="Us" className="valentine-img" />
           <h1>Will you be my Valentine? 💗</h1>
           <div className="buttons">
             <button
@@ -210,6 +212,7 @@ function App() {
               No 🙅‍♀️
             </button>
           </div>
+          <div className="no-attempts" key={noAttempts}>Attempts to click No: {noAttempts}</div>
         </div>
       ) : (
         <>
@@ -226,3 +229,7 @@ function App() {
 }
 
 export default App
+
+
+
+
