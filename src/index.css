@@ -227,8 +227,8 @@ button {
 
 @media (max-width: 768px) {
   body {
-    align-items: flex-start;
-    padding: 14px 0;
+    align-items: center;
+    padding: max(env(safe-area-inset-top), 10px) 0 max(env(safe-area-inset-bottom), 10px);
   }
 
   .container {
@@ -301,5 +301,6 @@ button {
     border-width: 1.5px;
   }
 }
+
 
 
