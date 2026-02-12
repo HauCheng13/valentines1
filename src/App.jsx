@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import './index.css'
-import valentineImg1 from './assets/valentinepic.jpg'
+import valentineImg1 from './assets/valentinepic2.jpg'
 import penguinImg from './assets/penguin.jpg'
 
 function App() {
@@ -298,7 +298,7 @@ function App() {
         <div className="container" ref={containerRef}>
           <div className="time-jp">{formatTime('Asia/Tokyo')}</div>
           <img src={valentineImg1} alt="Us" className="valentine-img" />
-          <h1>Can I treat you dinner one day</h1>
+          <h1>Dinner, my treat?</h1>
           <div className="buttons">
             <button
               className="btn-yes"
@@ -342,4 +342,5 @@ function App() {
 }
 
 export default App
+
 
