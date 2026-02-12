@@ -22,19 +22,19 @@ function App() {
   const noBtnRef = useRef(null)
   const containerRef = useRef(null)
 
-  // Floating Hearts logic
-  const [hearts, setHearts] = useState([])
+  // Falling snow logic
+  const [snowflakes, setSnowflakes] = useState([])
 
   useEffect(() => {
-    const symbols = ['❤', '💖', '💕', '💗']
-    const newHearts = Array.from({ length: 15 }).map((_, i) => ({
+    const newSnowflakes = Array.from({ length: 60 }).map((_, i) => ({
       id: i,
-      symbol: symbols[Math.floor(Math.random() * symbols.length)],
       left: Math.random() * 100 + 'vw',
-      duration: Math.random() * 3 + 4 + 's',
-      delay: Math.random() * 5 + 's'
+      size: Math.random() * 8 + 4,
+      opacity: Math.random() * 0.5 + 0.3,
+      duration: Math.random() * 2 + 2.5 + 's',
+      delay: Math.random() * 2 + 's'
     }))
-    setHearts(newHearts)
+    setSnowflakes(newSnowflakes)
   }, [])
 
   useEffect(() => {
@@ -276,22 +276,21 @@ function App() {
 
   return (
     <>
-
-
-      {/* Background Hearts */}
-      <div className="bg-hearts">
-        {hearts.map(heart => (
+      {/* Background Snow */}
+      <div className="bg-snow">
+        {snowflakes.map((flake) => (
           <div
-            key={heart.id}
-            className="heart"
+            key={flake.id}
+            className="snowflake"
             style={{
-              left: heart.left,
-              animationDuration: heart.duration,
-              animationDelay: heart.delay
+              left: flake.left,
+              width: `${flake.size}px`,
+              height: `${flake.size}px`,
+              opacity: flake.opacity,
+              animationDuration: flake.duration,
+              animationDelay: flake.delay
             }}
-          >
-            {heart.symbol}
-          </div>
+          />
         ))}
       </div>
 
@@ -307,7 +306,7 @@ function App() {
               onMouseEnter={() => spawnConfettiBurst(40)}
               onMouseLeave={clearConfetti}
             >
-              Yes 💕
+              Yes 😊
             </button>
             {/* Placeholder to keep layout stable */}
             {noPos.position === 'absolute' && btnSize && (
@@ -331,7 +330,7 @@ function App() {
           <div className="container success-message" style={{ display: 'block' }}>
             <div className="time-jp">{formatTime('Asia/Tokyo')}</div>
             <img src={penguinImg} alt="Penguin" className="penguin-img" />
-            <h1 className="success-text">Hello Ms Trang</h1>
+            <h1 className="success-text">Heyy Ms.Trang</h1>
             <p className="sub-text">Had some fun with this instead of doing something productive 🤣🤣</p>
             <button className="btn-yes" onClick={handleReset}>Back</button>
           </div>
@@ -343,5 +342,4 @@ function App() {
 }
 
 export default App
-
 
