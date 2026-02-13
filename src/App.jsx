@@ -296,7 +296,7 @@ function App() {
 
       {!yesPressed ? (
         <div className="container" ref={containerRef}>
-          <div className="time-jp">{formatTime('Asia/Tokyo')}</div>
+          <div className="time-jp">{formatTime('Asia/Ho_Chi_Minh')}</div>
           <img src={valentineImg1} alt="Us" className="valentine-img" />
           <h1>Dinner, my treat?</h1>
           <div className="buttons">
@@ -328,7 +328,7 @@ function App() {
       ) : (
         <>
           <div className="container success-message" style={{ display: 'block' }}>
-            <div className="time-jp">{formatTime('Asia/Tokyo')}</div>
+            <div className="time-jp">{formatTime('Asia/Ho_Chi_Minh')}</div>
             <img src={penguinImg} alt="Penguin" className="penguin-img" />
             <h1 className="success-text">Heyy Trang</h1>
             <p className="sub-text">Had some fun with this instead of doing something productive 🤣🤣</p>
@@ -342,5 +342,4 @@ function App() {
 }
 
 export default App
-
 
