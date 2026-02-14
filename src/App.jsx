@@ -330,8 +330,8 @@ function App() {
           <div className="container success-message" style={{ display: 'block' }}>
             <div className="time-jp">{formatTime('Asia/Ho_Chi_Minh')}</div>
             <img src={penguinImg} alt="Penguin" className="penguin-img" />
-            <h1 className="success-text">Heyy Trang</h1>
-            <p className="sub-text">Had some fun with this instead of doing something productive 🤣🤣</p>
+            <h1 className="success-text">Hi Trang!</h1>
+            <p className="sub-text">Had some fun with this instead of doing something productive 🤣</p>
             <button className="btn-yes" onClick={handleReset}>Back</button>
           </div>
         </>
